@@ -21,6 +21,7 @@ import com.neo.implementingeffectivenavigation.util.Messages;
 
 import java.util.ArrayList;
 
+
 public class MessagesRecyclerViewAdapter extends RecyclerView.Adapter<MessagesRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "ConnectionsAdapter";
@@ -62,12 +63,12 @@ public class MessagesRecyclerViewAdapter extends RecyclerView.Adapter<MessagesRe
         holder.name.setText(user.getName());
         holder.message.setText(Messages.MESSAGES[position]); //generate a random message
 
-        // listener for each item
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked on: " + user.getName());
-                mInterface.onMessageSelected(new Message(mUsers.get(position), Messages.MESSAGES[position]));   // calls the interface method and pass the message object
+
+                mInterface.onMessageSelected(new Message(user, Messages.MESSAGES[position]));
             }
         });
     }
@@ -75,8 +76,6 @@ public class MessagesRecyclerViewAdapter extends RecyclerView.Adapter<MessagesRe
 
     @Override
     public Filter getFilter() {
-
-        // for filtering the recyclerView list result using the SearchView query
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {

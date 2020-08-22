@@ -1,7 +1,6 @@
 package com.neo.implementingeffectivenavigation.settings;
 
 import android.content.Context;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.neo.implementingeffectivenavigation.R;
 
 import java.util.ArrayList;
+
 
 
 /**

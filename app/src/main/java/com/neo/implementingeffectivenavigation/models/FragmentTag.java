@@ -1,34 +1,38 @@
 package com.neo.implementingeffectivenavigation.models;
 
-import android.nfc.Tag;
 
 import androidx.fragment.app.Fragment;
+
 
 /**
  * class to hold a fragment and it's tag
  */
 public class FragmentTag {
-    private Fragment mFragment;
-    private String mTag;
+
+    private Fragment fragment;
+    private String tag;
 
     public FragmentTag(Fragment fragment, String tag) {
-        mFragment = fragment;
-        mTag = tag;
+        this.fragment = fragment;
+        this.tag = tag;
+    }
+
+    public FragmentTag() {
     }
 
     public Fragment getFragment() {
-        return mFragment;
+        return fragment;
     }
 
     public void setFragment(Fragment fragment) {
-        mFragment = fragment;
+        this.fragment = fragment;
     }
 
     public String getTag() {
-        return mTag;
+        return tag;
     }
 
     public void setTag(String tag) {
-        mTag = tag;
+        this.tag = tag;
     }
 }

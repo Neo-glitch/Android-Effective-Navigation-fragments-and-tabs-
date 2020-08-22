@@ -26,17 +26,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-
-
 public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TAG = "MessagesFragment";
 
     //widgets
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private MessagesRecyclerViewAdapter mRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
     private SearchView mSearchView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     //vars
     private ArrayList<User> mUsers = new ArrayList<>();
@@ -50,17 +48,14 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mSearchView = (SearchView) view.findViewById(R.id.action_search);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         getConnections();
         initSearchView();
 
         return view;
     }
 
-    /**
-     * initializes the searchView widget, for filtering messages in messagesFragment by userName
-     */
     private void initSearchView(){
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -115,7 +110,6 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-
     @Override
     public void onRefresh() {
         getConnections();
@@ -125,8 +119,16 @@ public class MessagesFragment extends Fragment implements SwipeRefreshLayout.OnR
     /**
      * notifies adapter that data set might have changed and tells refresh listener to stop refreshing
      */
-    private void onItemsLoadComplete(){
+    void onItemsLoadComplete() {
         mRecyclerViewAdapter.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: called.");
+    }
+
+
 }

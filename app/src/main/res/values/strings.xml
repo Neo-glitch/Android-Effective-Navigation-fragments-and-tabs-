@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">ImplementingEffectiveNavigation</string>
+    <string name="app_name">Implementing Effective Navigation</string>
     <string name="search_hint">Start typing a name...</string>
+    <string name="name_hint">Name</string>
+    <string name="email_hint">Name@YourEmail.com</string>
+    <string name="phone_hint">1(604) 855&#8211;1111</string>
 
     <!-- Navigation Drawer -->
     <string name="home">Home</string>
@@ -66,6 +69,7 @@
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
         anim id est laborum.
 </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.neo.implementingeffectivenavigation.settings;
 
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import com.neo.implementingeffectivenavigation.R;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";

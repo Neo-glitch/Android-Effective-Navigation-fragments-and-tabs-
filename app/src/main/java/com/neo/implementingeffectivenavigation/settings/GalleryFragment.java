@@ -73,11 +73,11 @@ public class GalleryFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: photo has been chosen.");
 
-                if(!mSelectedImage.equals("")){   // make sure the result to be sent not null
+                if(!mSelectedImage.equals("")){                 // make sure the result to be sent not null
                     getActivity().setResult(
                             NEW_PHOTO_REQUEST,
-                            getActivity().getIntent().putExtra(getString(R.string.intent_new_gallery_photo), mSelectedImage));  // puts the photo url in the result sent back
-                    getActivity().finish();   // finishes activity when user taps choose and send the result back to settings activity
+                            getActivity().getIntent().putExtra(getString(R.string.intent_new_gallery_photo), mSelectedImage));     // puts the photo url in the result sent back
+                    getActivity().finish();                                         // finishes activity when user taps choose and send the result back to settings activity
                 }
             }
         });
@@ -152,13 +152,12 @@ public class GalleryFragment extends Fragment {
                 Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " +e.getMessage() );
             }
 
-            // when user clicks on an item in the grid
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.d(TAG, "onItemClick: selected an image: " + imgURLs.get(position));
 
-                    setImage(imgURLs.get(position), galleryImage);   // sets the ImageView to the image tapped # preview
+                    setImage(imgURLs.get(position), galleryImage);
                     mSelectedImage = imgURLs.get(position);
                 }
             });

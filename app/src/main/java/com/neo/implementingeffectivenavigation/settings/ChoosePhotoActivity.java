@@ -30,28 +30,29 @@ public class ChoosePhotoActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_photo);
-        mViewPager = findViewById(R.id.viewpager_container);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager_container);
 
         setupViewPager();
     }
 
+    /**
+     * setup viewpager for manager the tabs
+     */
     private void setupViewPager(){
-        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+        MyPagerAdapter adapter =  new MyPagerAdapter(getSupportFragmentManager());
         mGalleryFragment = new GalleryFragment();
         mPhotoFragment = new PhotoFragment();
         adapter.addFragment(mGalleryFragment);
         adapter.addFragment(mPhotoFragment);
-
         mViewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs_bottom);
-        tabLayout.setupWithViewPager(mViewPager);       // associates the tabLayout with the viewPager that hosts our fragment
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_bottom);
+        tabLayout.setupWithViewPager(mViewPager);                       // associates the tabLayout with the viewPager that hosts our fragment
 
         tabLayout.getTabAt(GALLERY_FRAGMENT).setText(getString(R.string.tag_fragment_gallery));
         tabLayout.getTabAt(PHOTO_FRAGMENT).setText(getString(R.string.tag_fragment_photo));
+
     }
-
-
 
 }
 

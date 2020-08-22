@@ -1,7 +1,6 @@
 package com.neo.implementingeffectivenavigation;
 
 import android.content.Context;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +48,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         RequestOptions requestOptions = new RequestOptions()
                         .placeholder(R.drawable.ic_launcher_background);
 
-        // for setting image to ImageView widget
         Glide.with(mContext)
                 .load(mUsers.get(position).getProfile_image())
                 .apply(requestOptions)
@@ -64,7 +62,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked on: " + mUsers.get(position).getName());
 
-                mInterface.inflateViewProfileFragment(mUsers.get(position));   // calls the interface method
+                mInterface.inflateViewProfileFragment(mUsers.get(position));
             }
         });
     }
@@ -72,7 +70,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mInterface = (IMainActivity) mContext;   // this method is best place to int the interface
+        mInterface = (IMainActivity) mContext;                  // this method is best place to int the interface
     }
 
     @Override

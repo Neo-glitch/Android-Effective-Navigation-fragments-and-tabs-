@@ -8,6 +8,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.neo.implementingeffectivenavigation.IMainActivity;
@@ -74,7 +74,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     //widgets
     private TextView mFragmentHeading;
     private RelativeLayout mBackArrow;
-    private EditText mName;
+    private EditText mName, mEmail, mPhoneNumber;
     private Spinner mGenderSpinner, mInterestedInSpinner, mStatusSpinner;
     private CircleImageView mProfileImage;
     private Button mSave;
@@ -98,14 +98,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         mStatusSpinner = view.findViewById(R.id.relationship_status_spinner);
         mProfileImage = view.findViewById(R.id.profile_image);
         mSave = view.findViewById(R.id.btn_save);
+        mEmail = view.findViewById(R.id.email);
+        mPhoneNumber = view.findViewById(R.id.phone_number);
 
         mProfileImage.setOnClickListener(this);
         mSave.setOnClickListener(this);
+        mBackArrow.setOnClickListener(this);
 
+        checkPermissions();
         setBackgroundImage(view);
         initToolbar();
         getSavedPreferences();
-        checkPermissions();
 
 
         return view;
@@ -116,6 +119,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         String name = preferences.getString(PreferenceKeys.NAME, "");
         mName.setText(name);
+
+        String email = preferences.getString(PreferenceKeys.EMAIL, "");
+        mEmail.setText(email);
+
+        String phoneNumber = preferences.getString(PreferenceKeys.PHONE_NUMBER, "");
+        mPhoneNumber.setText(phoneNumber);
 
         mSelectedGender = preferences.getString(PreferenceKeys.GENDER, getString(R.string.gender_none));
         String[] genderArray = getActivity().getResources().getStringArray(R.array.gender_array);
@@ -143,21 +152,15 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         mSelectedImageUrl = preferences.getString(PreferenceKeys.PROFILE_IMAGE, "");
         if(!mSelectedImageUrl.equals("")){
-            Glide.with(getActivity())
+            Glide.with(getContext())
                     .load(mSelectedImageUrl)
                     .into(mProfileImage);
         }
-//
+
         mGenderSpinner.setOnItemSelectedListener(this);
         mInterestedInSpinner.setOnItemSelectedListener(this);
         mStatusSpinner.setOnItemSelectedListener(this);
-
-        Log.d(TAG, "getSavedPreferences: name: " + name);
-        Log.d(TAG, "getSavedPreferences: gender: " + mSelectedGender);
-        Log.d(TAG, "getSavedPreferences: interested in: " + mSelectedInterest);
-        Log.d(TAG, "getSavedPreferences: status: " + mSelectedStatus);
     }
-
 
     @Override
     public void onClick(View view) {
@@ -166,7 +169,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         if(view.getId() == R.id.back_arrow){
             Log.d(TAG, "onClick: navigating back.");
             mInterface.onBackPressed();
-
         }
 
         if(view.getId() == R.id.btn_save){
@@ -176,34 +178,40 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         if(view.getId() == R.id.profile_image){
             Log.d(TAG, "onClick: opening activity to choose a photo.");
-            if(mPermissionsChecked){    // if permission granted
+            if(mPermissionsChecked){
                 Intent intent = new Intent(getActivity(), ChoosePhotoActivity.class);
                 startActivityForResult(intent, NEW_PHOTO_REQUEST);
-            } else{
+            }
+            else{
                 checkPermissions();
             }
         }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: called");
-        if(resultCode == NEW_PHOTO_REQUEST){   // request code of intent for starting choosePhoto activity
-            Log.d(TAG, "onActivityResult: received activity result from a photo request");
-            if(data != null){
-                if(data.hasExtra(getString(R.string.intent_new_gallery_photo))){  // if intent has extra with key(from phones mem)
-                    Glide.with(getActivity())
+        Log.d(TAG, "onActivityResult: called.");
+
+        if(requestCode == NEW_PHOTO_REQUEST) {     // request code of intent for starting choosePhoto activity
+            Log.d(TAG, "onActivityResult: received an activity result from photo request.");
+            if (data != null) {
+                if (data.hasExtra(getString(R.string.intent_new_gallery_photo))) {
+                    Glide.with(getContext())
                             .load(data.getStringExtra(getString(R.string.intent_new_gallery_photo)))
                             .into(mProfileImage);
-
-                    mSelectedImageUrl = data.getStringExtra(getString(R.string.intent_new_gallery_photo));  // gets the value passed(image Url)
-
+                    mSelectedImageUrl = data.getStringExtra(getString(R.string.intent_new_gallery_photo));
+                }
+                else if (data.hasExtra(getString(R.string.intent_new_camera_photo))) {
+                    Glide.with(getContext())
+                            .load(data.getStringExtra(getString(R.string.intent_new_camera_photo)))
+                            .into(mProfileImage);
+                    mSelectedImageUrl = data.getStringExtra(getString(R.string.intent_new_camera_photo));
                 }
             }
-
         }
     }
+
 
     /**
      * requests needed permissions from user else do nothing
@@ -254,6 +262,14 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
             Toast.makeText(getActivity(), "Enter your name", Toast.LENGTH_SHORT).show();
         }
 
+        String email = mEmail.getText().toString();
+        editor.putString(PreferenceKeys.EMAIL, email);
+        editor.apply();
+
+        String phoneNumber = mPhoneNumber.getText().toString();
+        editor.putString(PreferenceKeys.PHONE_NUMBER, phoneNumber);
+        editor.apply();
+
         editor.putString(PreferenceKeys.GENDER, mSelectedGender);
         editor.apply();
 
@@ -269,12 +285,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         }
 
         Toast.makeText(getActivity(), "saved", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "savePreferences: name: " + name);
-        Log.d(TAG, "savePreferences: gender: " + mSelectedGender);
-        Log.d(TAG, "savePreferences: interested in: " + mSelectedInterest);
-        Log.d(TAG, "savePreferences: status: " + mSelectedStatus);
     }
-
 
 
     private void setBackgroundImage(View view){
@@ -299,7 +310,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         mInterface = (IMainActivity) getActivity();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: called.");
+    }
 }
 
 

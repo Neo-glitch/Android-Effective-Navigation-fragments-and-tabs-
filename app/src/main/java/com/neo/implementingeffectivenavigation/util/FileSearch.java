@@ -4,9 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-/**
- * gets list of dir path from path sent to it
- */
 public class FileSearch {
 
     private static final String TAG = "FileSearch";
@@ -40,7 +37,6 @@ public class FileSearch {
 
     /**
      * Search a directory and return a list of all **files** contained inside
-     * used inf GalleryFragment where images might be on the device # not cam
      * @param directory
      * @return
      */

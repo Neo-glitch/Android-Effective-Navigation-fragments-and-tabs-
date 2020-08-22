@@ -25,9 +25,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-/**
- * similar to homeFragment
- */
 public class SavedConnectionsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TAG = "SavedConnFragment";
@@ -36,9 +33,9 @@ public class SavedConnectionsFragment extends Fragment implements SwipeRefreshLa
     private static final int NUM_GRID_COLUMNS = 2;
 
     //widgets
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private MainRecyclerViewAdapter mRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     //vars
     private ArrayList<User> mUsers = new ArrayList<>();
@@ -48,22 +45,17 @@ public class SavedConnectionsFragment extends Fragment implements SwipeRefreshLa
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_connections, container, false);
         Log.d(TAG, "onCreateView: started.");
-
-        mRecyclerView = view.findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         getConnections();
 
         return view;
     }
 
-    /**
-     * gets all the saved connections made by user i.e all people user has liked or loved
-     */
     private void getConnections(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        // gets the list connection(names) from sharedPreferences
         Set<String> savedNames = preferences.getStringSet(PreferenceKeys.SAVED_CONNECTIONS, new HashSet<String>());
 
         Users users = new Users();
@@ -88,18 +80,21 @@ public class SavedConnectionsFragment extends Fragment implements SwipeRefreshLa
         mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
     }
 
-
     @Override
     public void onRefresh() {
         getConnections();
         onItemsLoadComplete();
     }
 
-    /**
-     * notifies adapter that data set might have changed and tells refresh listener to stop refreshing
-     */
-    private void onItemsLoadComplete(){
+    void onItemsLoadComplete() {
         mRecyclerViewAdapter.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: called.");
+    }
+
 }

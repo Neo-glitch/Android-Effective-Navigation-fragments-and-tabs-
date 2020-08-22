@@ -1,36 +1,40 @@
 package com.neo.implementingeffectivenavigation.settings;
 
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * adapter class for ViewPager implementation using fragments
+ * Class that stores fragments for tabs
  */
 public class MyPagerAdapter extends FragmentPagerAdapter {
-    private final ArrayList<Fragment> mFragmentList = new ArrayList<>();    // list to hold tab fragments
 
-    public MyPagerAdapter(@NonNull FragmentManager fm) {
+    // list to hold tab fragments
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+
+
+    public MyPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    @NonNull
     @Override
-    public Fragment getItem(int position) {  // get the fragment at the pos in foucus
+    public Fragment getItem(int position) {
         return mFragmentList.get(position);
     }
 
+
     @Override
-    public int getCount() {   // defines the number of tabs to have
+    public int getCount() {
         return mFragmentList.size();
     }
 
-    public void addFragment(Fragment fragment) {    // method to add fragment to ViewPager adapter fragment list
+    public void addFragment(Fragment fragment){                 // method to add fragment to ViewPager adapter fragment list
         mFragmentList.add(fragment);
-
     }
+
 }

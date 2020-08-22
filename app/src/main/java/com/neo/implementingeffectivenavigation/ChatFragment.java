@@ -28,9 +28,6 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-/**
- * class for implementing chat feature in our app
- */
 public class ChatFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "ChatFragment";
@@ -78,6 +75,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
 
         mSendMessage.setOnClickListener(this);
         mRelativeLayoutTop.setOnClickListener(this);
+        mBackArrow.setOnClickListener(this);
 
         initToolbar();
         initRecyclerView();
@@ -101,17 +99,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
                 .into(backgroundView);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mInterface = (IMainActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mInterface = null;
-    }
 
     private void getSavedPreferences(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -133,7 +120,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         if(view.getId() == R.id.back_arrow){
             Log.d(TAG, "onClick: navigating back.");
             mInterface.onBackPressed();
-
         }
         if(view.getId() == R.id.post_message){
             Log.d(TAG, "onClick: posting new message.");
@@ -142,15 +128,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
             mNewMessage.setText("");
             mRecyclerView.smoothScrollToPosition(mMessages.size() - 1);
         }
-        if(view.getId() == R.id.relLayoutTop){     // the layout that is used as a toolbar
+        if(view.getId() == R.id.relLayoutTop){
             Log.d(TAG, "onClick: navigating back.");
-            mInterface.inflateViewProfileFragment(mMessage.getUser());      //  calls this method in place of implementation(MainActivity)
+            mInterface.inflateViewProfileFragment(mMessage.getUser());
         }
 
     }
 
 
-    // sets profile image of dummyUser and userName in toolbar and attaches a listener to the back arrow widget
     private void initToolbar(){
         Log.d(TAG, "initToolbar: initializing toolbar.");
         mBackArrow.setOnClickListener(this);
@@ -160,6 +145,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
                 .into(mProfileImage);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: called.");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mInterface = (IMainActivity) getActivity();
+    }
 
 }
 
